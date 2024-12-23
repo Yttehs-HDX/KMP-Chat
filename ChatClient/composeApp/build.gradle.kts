@@ -37,6 +37,8 @@ kotlin {
             implementation(libs.material3)
             implementation(libs.lifecycle.viewmodel.compose)
             implementation(libs.koin.core)
+            implementation(libs.ktor.client)
+            implementation(libs.ktor.client.cio.jvm)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

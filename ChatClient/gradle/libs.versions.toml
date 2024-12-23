@@ -18,6 +18,8 @@ kotlinx-coroutines = "1.9.0"
 material3 = "1.7.1"
 androidx-lifecycle = "2.8.4"
 koinCore = "4.0.0"
+ktorClient = "3.0.2"
+ktorClientCioJvm = "3.0.2"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -37,6 +39,8 @@ kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-co
 material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
 lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
+ktor-client-cio-jvm = { module = "io.ktor:ktor-client-cio-jvm", version.ref = "ktorClientCioJvm" }
+ktor-client = { module = "io.ktor:ktor-client", version.ref = "ktorClient" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
