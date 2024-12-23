@@ -8,5 +8,6 @@ import kotlinx.html.*
 fun Application.configureRouting() {
     routing {
         mainSite()
+        chatSite()
     }
 }
