@@ -28,13 +28,14 @@ fun Routing.chatSite() {
                     is Frame.Text -> {
                         val rawText = frame.readText()
                         val text = "${client.name} (id = ${client.id}): $rawText"
-                        val textToSend = Frame.Text(text)
                         clients.forEach {
+                            // framed text must be initiated in each iteration
+                            val textToSend = Frame.Text(text)
                             it.session.outgoing.send(textToSend)
                         }
                     }
 
-                    else -> {}
+                    else -> continue
                 }
             }
         } catch (e: Exception) {
