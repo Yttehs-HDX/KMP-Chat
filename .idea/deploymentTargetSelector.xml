@@ -2,16 +2,7 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="ChatClient.composeApp.androidTest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="ChatClient.composeApp">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="ChatClient.composeApp.unitTest">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="ChatClient.composeApp.main">
+      <SelectionState runConfigName="androidMain">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
