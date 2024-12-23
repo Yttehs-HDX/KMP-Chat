@@ -36,6 +36,7 @@ kotlin {
             // custom dependencies
             implementation(libs.material3)
             implementation(libs.lifecycle.viewmodel.compose)
+            implementation(libs.koin.core)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
