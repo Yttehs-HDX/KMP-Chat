@@ -13,6 +13,8 @@ fun App() {
     MaterialTheme {
         Scaffold(
             topBar = { AppTopBar() },
-        ) { MainPage() }
+        ) { padding ->
+            MainPage(padding)
+        }
     }
 }
