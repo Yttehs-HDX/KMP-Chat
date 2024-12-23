@@ -7,19 +7,23 @@ import kotlinx.html.*
 
 fun Application.configureRouting() {
     routing {
-        get("/") {
-            call.respondHtml {
-                head {
-                    title { +"Chat Server" }
-                }
-                body {
-                    h1 { +"Chat Server" }
-                    p {
-                        +"Powered by "
-                        a {
-                            href = "https://ktor.io"
-                            +"Ktor"
-                        }
+        mainSite()
+    }
+}
+
+fun Routing.mainSite() {
+    get("/") {
+        call.respondHtml {
+            head {
+                title { +"Chat Server" }
+            }
+            body {
+                h1 { +"Chat Server" }
+                p {
+                    +"Powered by "
+                    a {
+                        href = "https://ktor.io"
+                        +"Ktor"
                     }
                 }
             }
