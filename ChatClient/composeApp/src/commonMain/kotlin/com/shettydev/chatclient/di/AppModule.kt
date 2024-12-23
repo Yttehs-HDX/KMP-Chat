@@ -1,5 +1,6 @@
 package com.shettydev.chatclient.di
 
+import com.shettydev.chatclient.viewmodel.ChatViewModel
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -14,7 +15,7 @@ private fun initKoin() {
         modules(
             module {
                 // add dependencies here
-
+                single { ChatViewModel() }
             }
         )
     }
