@@ -55,6 +55,7 @@ private fun UrlInputBox(onClick: (String) -> Unit) {
             modifier = Modifier.fillMaxWidth(),
             shape = CircleShape,
             colors = TextFieldDefaults.textFieldColors(
+                textColor = MaterialTheme.colorScheme.onSurface,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
             ),
@@ -143,6 +144,7 @@ private fun MsgInputBox(
                 .weight(1f),
             shape = CircleShape,
             colors = TextFieldDefaults.textFieldColors(
+                textColor = MaterialTheme.colorScheme.onSurface,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
             ),

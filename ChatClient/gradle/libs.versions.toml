@@ -20,6 +20,7 @@ androidx-lifecycle = "2.8.4"
 koinCore = "4.0.0"
 ktorClient = "3.0.2"
 ktorClientCioJvm = "3.0.2"
+accompanist-systemuicontroller = "0.36.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -41,6 +42,7 @@ lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifec
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
 ktor-client-cio-jvm = { module = "io.ktor:ktor-client-cio-jvm", version.ref = "ktorClientCioJvm" }
 ktor-client = { module = "io.ktor:ktor-client", version.ref = "ktorClient" }
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist-systemuicontroller" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
