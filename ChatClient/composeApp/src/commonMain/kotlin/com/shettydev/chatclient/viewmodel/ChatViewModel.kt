@@ -22,6 +22,15 @@ class ChatViewModel : ViewModel() {
     fun connect(url: Url) {
         viewModelScope.launch {
             try {
+                if (::webSocketSession.isInitialized && webSocketSession.isActive) {
+                    webSocketSession.close(
+                        CloseReason(
+                            CloseReason.Codes.NORMAL,
+                            "Reconnecting..."
+                        )
+                    )
+                }
+
                 webSocketSession = client.webSocketSession(
                     method = HttpMethod.Get,
                     path = url.encodedPath,
