@@ -24,26 +24,20 @@ fun Routing.chatSite() {
                 val frame = incoming.receiveCatching().getOrNull() ?: break
                 when (frame) {
                     is Frame.Text -> {
-                        when (val rawText = frame.readText().trim()) {
-                            // "/name NewName" command to change the username
-                            rawText.startsWith("/name ").toString() -> {
-                                val newName = rawText
-                                    .removePrefix("/name ")
-                                    .trim()
-                                if (newName.isNotBlank()) {
-                                    client.userName = newName
-                                }
-                            }
+                        val rawText = frame.readText().trim()
 
+                        // "/name NewName" command to change the username
+                        if (rawText.startsWith("/name ")) {
+                            val newName = rawText.removePrefix("/name ").trim()
+                            if (newName.isNotBlank()) client.userName = newName
+                        } else {
                             // send a message to all clients
-                            else -> {
-                                val chatMessage = ChatMsg(
-                                    userId = client.id,
-                                    userName = client.userName,
-                                    content = rawText
-                                )
-                                broadcastMessage(chatMessage)
-                            }
+                            val chatMessage = ChatMsg(
+                                userId = client.id,
+                                userName = client.userName,
+                                content = rawText
+                            )
+                            broadcastMessage(chatMessage)
                         }
                     }
 
