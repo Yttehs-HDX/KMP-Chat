@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.shettydev.chatclient.di.koin
 import com.shettydev.chatclient.extend.isWsUrl
 import com.shettydev.chatclient.viewmodel.ChatViewModel
+import io.ktor.http.*
 
 @Composable
 fun MainPage(padding: PaddingValues) {
@@ -24,8 +25,8 @@ fun MainPage(padding: PaddingValues) {
 
     Column(Modifier.padding(padding)) {
         UrlInputBox(
-            onClick = {
-                chatViewModel.connect()
+            onClick = { url ->
+                chatViewModel.connect(Url(url))
             }
         )
         MsgColumn(
