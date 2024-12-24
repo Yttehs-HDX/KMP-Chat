@@ -1,37 +1,47 @@
 package com.shettydev.routing
 
+import com.shettydev.entity.ChatClient
+import com.shettydev.entity.ChatMsg
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
-import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
-class ChatClient(val session: DefaultWebSocketSession) {
-    companion object {
-        val LastId = AtomicInteger(0)
-    }
-
-    val id = LastId.getAndIncrement()
-    val name = "user$id"
-}
+private val lastId = AtomicInteger(0)
+private val clients = ConcurrentHashMap<Int, ChatClient>()
 
 fun Routing.chatSite() {
-    val clients = Collections.synchronizedSet(mutableSetOf<ChatClient>())
-
     webSocket("/chat") {
-        val client = ChatClient(this)
-        clients += client
+        val clientId = lastId.incrementAndGet()
+        val client = ChatClient(this, "Nameless", clientId)
+        clients[clientId] = client
 
         try {
             while (true) {
-                when (val frame = incoming.receive()) {
+                val frame = incoming.receiveCatching().getOrNull() ?: break
+                when (frame) {
                     is Frame.Text -> {
-                        val rawText = frame.readText()
-                        val text = "${client.name} (id = ${client.id}): $rawText"
-                        clients.forEach {
-                            // framed text must be initiated in each iteration
-                            val textToSend = Frame.Text(text)
-                            it.session.outgoing.send(textToSend)
+                        when (val rawText = frame.readText().trim()) {
+                            // "/name NewName" command to change the username
+                            rawText.startsWith("/name ").toString() -> {
+                                val newName = rawText
+                                    .removePrefix("/name ")
+                                    .trim()
+                                if (newName.isNotBlank()) {
+                                    client.userName = newName
+                                }
+                            }
+
+                            // send a message to all clients
+                            else -> {
+                                val chatMessage = ChatMsg(
+                                    userId = client.id,
+                                    userName = client.userName,
+                                    content = rawText
+                                )
+                                broadcastMessage(chatMessage)
+                            }
                         }
                     }
 
@@ -41,7 +51,15 @@ fun Routing.chatSite() {
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
-            clients -= client
+            clients.remove(client.id)
         }
+    }
+}
+
+private suspend fun broadcastMessage(msg: ChatMsg) {
+    val textToSend = "[${msg.userName} (${msg.userId})]: ${msg.content}"
+
+    clients.values.forEach { client ->
+        client.session.outgoing.send(Frame.Text(textToSend))
     }
 }
