@@ -21,16 +21,9 @@ class ChatViewModel : ViewModel() {
 
     fun connect(url: Url) {
         viewModelScope.launch {
-            try {
-                if (::webSocketSession.isInitialized && webSocketSession.isActive) {
-                    webSocketSession.close(
-                        CloseReason(
-                            CloseReason.Codes.NORMAL,
-                            "Reconnecting..."
-                        )
-                    )
-                }
+            tryCloseOldSession()
 
+            try {
                 webSocketSession = client.webSocketSession(
                     method = HttpMethod.Get,
                     path = url.encodedPath,
@@ -52,6 +45,8 @@ class ChatViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+            } finally {
+                client.close()
             }
         }
     }
@@ -65,6 +60,14 @@ class ChatViewModel : ViewModel() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
+    }
+
+    private suspend fun tryCloseOldSession() {
+        if (::webSocketSession.isInitialized && webSocketSession.isActive) {
+            webSocketSession.close(
+                CloseReason(CloseReason.Codes.NORMAL, "Reconnecting...")
+            )
         }
     }
 }
