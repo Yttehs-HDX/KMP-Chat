@@ -4,8 +4,8 @@ KMP-Chat is a tool for chatting, based on KMP(Kotlin Multiplatform) technology, 
 
 KMP-Chat contains two parts:
 
-- **Server**: WebSocket server
-- **Client**: Desktop/Android multiplatform application.
+- [**Server**](ChatServer): WebSocket server
+- [**Client**](ChatClient): Desktop/Android multiplatform application.
 
 ## Usage
 
