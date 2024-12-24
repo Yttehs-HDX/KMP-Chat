@@ -5,6 +5,8 @@ import com.shettydev.entity.ChatMsg
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -57,7 +59,9 @@ fun Routing.chatSite() {
 }
 
 private suspend fun broadcastMessage(msg: ChatMsg) {
-    val textToSend = "[${msg.userName} (${msg.userId})]: ${msg.content}"
+    val json = Json { prettyPrint = false }
+    val textToSend = json.encodeToString(msg)
+    println(textToSend)
 
     clients.values.forEach { client ->
         client.session.outgoing.send(Frame.Text(textToSend))

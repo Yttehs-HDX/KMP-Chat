@@ -4,6 +4,7 @@ val logback_version: String by project
 plugins {
     kotlin("jvm") version "2.1.0"
     id("io.ktor.plugin") version "3.0.2"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.0"
 }
 
 group = "com.shettydev"
@@ -33,4 +34,5 @@ dependencies {
     implementation("io.ktor:ktor-server-html-builder")
     implementation("io.ktor:ktor-client")
     implementation("io.ktor:ktor-client-cio-jvm")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
 }

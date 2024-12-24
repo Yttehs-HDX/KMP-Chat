@@ -1,4 +1,4 @@
-package com.shettydev.entity
+package com.shettydev.chatclient.entity
 
 import kotlinx.serialization.Serializable
 

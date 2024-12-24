@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.shettydev.chatclient.di.koin
 import com.shettydev.chatclient.extend.isWsUrl
+import com.shettydev.chatclient.viewmodel.ChatMsgUiState
 import com.shettydev.chatclient.viewmodel.ChatViewModel
 import io.ktor.http.*
 
@@ -92,11 +93,12 @@ private fun UrlInputBox(onClick: (String) -> Unit) {
 
 @Composable
 private fun MsgColumn(
-    messages: List<String>,
+    messages: List<ChatMsgUiState>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier.padding(16.dp)) {
         items(messages.size) { index ->
+            val msgUiState = messages[index]
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Card(
                     shape = CircleShape
@@ -104,7 +106,7 @@ private fun MsgColumn(
                     Box(
                         modifier = Modifier.padding(8.dp),
                     ) {
-                        Text("user")
+                        Text(msgUiState.username)
                     }
                 }
                 Card(
@@ -113,7 +115,7 @@ private fun MsgColumn(
                     Box(
                         modifier = Modifier.padding(8.dp),
                     ) {
-                        Text(messages[index])
+                        Text(msgUiState.message)
                     }
                 }
             }

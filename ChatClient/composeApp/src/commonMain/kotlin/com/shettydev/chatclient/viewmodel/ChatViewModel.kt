@@ -2,6 +2,7 @@ package com.shettydev.chatclient.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shettydev.chatclient.entity.ChatMsg
 import io.ktor.client.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
@@ -10,10 +11,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 
 class ChatViewModel : ViewModel() {
-    private val _messages = MutableStateFlow<List<String>>(emptyList())
-    val messages: StateFlow<List<String>>
+    private val _messages = MutableStateFlow<List<ChatMsgUiState>>(emptyList())
+    val messages: StateFlow<List<ChatMsgUiState>>
         get() = _messages
 
     private val client = HttpClient { install(WebSockets) }
@@ -36,7 +38,13 @@ class ChatViewModel : ViewModel() {
                         when (frame) {
                             is Frame.Text -> {
                                 val receivedText = frame.readText()
-                                _messages.value += receivedText
+
+                                // handle json
+                                val json = Json { prettyPrint = false }
+                                val msg = json.decodeFromString<ChatMsg>(receivedText)
+                                val msgUiState = msg.toUiState()
+
+                                _messages.value += msgUiState
                             }
 
                             else -> continue
@@ -70,4 +78,16 @@ class ChatViewModel : ViewModel() {
             )
         }
     }
+}
+
+data class ChatMsgUiState(
+    val username: String,
+    val message: String,
+)
+
+fun ChatMsg.toUiState(): ChatMsgUiState {
+    return ChatMsgUiState(
+        username = "$userName ($userId)",
+        message = content,
+    )
 }
