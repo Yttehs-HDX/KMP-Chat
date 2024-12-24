@@ -5,6 +5,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -12,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.shettydev.chatclient.di.koin
+import com.shettydev.chatclient.extend.isWsUrl
 import com.shettydev.chatclient.viewmodel.ChatViewModel
 
 @Composable
@@ -19,18 +22,17 @@ fun MainPage(padding: PaddingValues) {
     val chatViewModel = koin.get<ChatViewModel>()
     val messages by chatViewModel.messages.collectAsState()
 
-    var isConnected by remember { mutableStateOf(false) }
-    if (!isConnected) {
-        chatViewModel.connect()
-        isConnected = true
-    }
-
     Column(Modifier.padding(padding)) {
-        MessageColumn(
+        UrlInputBox(
+            onClick = {
+                chatViewModel.connect()
+            }
+        )
+        MsgColumn(
             modifier = Modifier.weight(1f),
             messages = messages,
         )
-        InputBox(
+        MsgInputBox(
             onClick = { msg ->
                 chatViewModel.apply {
                     sendMessage(msg)
@@ -41,7 +43,53 @@ fun MainPage(padding: PaddingValues) {
 }
 
 @Composable
-private fun MessageColumn(
+private fun UrlInputBox(onClick: (String) -> Unit) {
+    Box(
+        modifier = Modifier.padding(16.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        val fontStyle = MaterialTheme.typography.bodyMedium
+        var textFieldValue by remember { mutableStateOf("ws://localhost:8080/chat") }
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            shape = CircleShape,
+            colors = TextFieldDefaults.textFieldColors(
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+            ),
+            value = textFieldValue,
+            textStyle = fontStyle,
+            maxLines = 1,
+            onValueChange = { newText ->
+                textFieldValue = newText
+            },
+            placeholder = {
+                Text(
+                    text = "URL",
+                    style = fontStyle,
+                )
+            },
+            trailingIcon = {
+                IconButton(
+                    modifier = Modifier.padding(8.dp),
+                    onClick = {
+                        if (textFieldValue.isWsUrl()) {
+                            onClick(textFieldValue)
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "Connect",
+                    )
+                }
+            },
+        )
+    }
+}
+
+@Composable
+private fun MsgColumn(
     messages: List<String>,
     modifier: Modifier = Modifier,
 ) {
@@ -72,7 +120,7 @@ private fun MessageColumn(
 }
 
 @Composable
-private fun InputBox(
+private fun MsgInputBox(
     modifier: Modifier = Modifier,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(8.dp),
