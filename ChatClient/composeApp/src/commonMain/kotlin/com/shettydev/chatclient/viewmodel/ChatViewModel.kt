@@ -19,11 +19,7 @@ class ChatViewModel : ViewModel() {
     private val client = HttpClient { install(WebSockets) }
     private lateinit var webSocketSession: DefaultWebSocketSession
 
-    init {
-        connect()
-    }
-
-    private fun connect() {
+    fun connect() {
         viewModelScope.launch {
             try {
                 webSocketSession = client.webSocketSession(

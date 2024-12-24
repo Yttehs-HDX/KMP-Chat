@@ -19,6 +19,12 @@ fun MainPage(padding: PaddingValues) {
     val chatViewModel = koin.get<ChatViewModel>()
     val messages by chatViewModel.messages.collectAsState()
 
+    var isConnected by remember { mutableStateOf(false) }
+    if (!isConnected) {
+        chatViewModel.connect()
+        isConnected = true
+    }
+
     Column(Modifier.padding(padding)) {
         MessageColumn(
             modifier = Modifier.weight(1f),
@@ -26,7 +32,9 @@ fun MainPage(padding: PaddingValues) {
         )
         InputBox(
             onClick = { msg ->
-                chatViewModel.sendMessage(msg)
+                chatViewModel.apply {
+                    sendMessage(msg)
+                }
             }
         )
     }
